@@ -51,3 +51,11 @@ Avg Length of Stay = AVERAGEX(healthcare_dataset, DATEDIFF(healthcare_dataset[Da
 
 // Emergency Cases Count
 Emergency Cases = CALCULATE(COUNT(healthcare_dataset[Name]), healthcare_dataset[Admission Type] = "Emergency")
+
+
+'''
+⚙️ How to View & Use This ProjectClone the Repository:Bashgit clone [https://github.com/YOUR_USERNAME/Healthcare-Operational-Analytics-PowerBI.git](https://github.com/YOUR_USERNAME/Healthcare-Operational-Analytics-PowerBI.git)
+Open the Report:Download and install Power BI Desktop.Open the file Hospital_Management_Analytics.pbix inside Power BI Desktop[cite: 6].Interact with Filters:Use the dynamic Year, Gender, and Admission Type slicers to explore specific segments.
+
+  ✉️ Contact & FeedbackCreated by [Piash Barua] – feel free to connect on LinkedIn or leave a star
+⭐️ on this repo if you found it useful!
