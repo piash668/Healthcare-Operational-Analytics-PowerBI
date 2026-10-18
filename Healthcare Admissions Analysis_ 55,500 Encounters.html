@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Healthcare Admissions Analysis: 55,500 Encounters</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;700;800&family=Figtree:wght@400;500;600&display=swap">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+:root{--bg:#F2F6F7;--card:#fff;--ink:#12303A;--mut:#587079;--line:#D8E3E6;--teal:#0E6E78;--blue:#2F7FB5;--amber:#E39B2D;--rose:#C8445A;--green:#2E9168;--soft:#E3F0F1;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0D1A1F;--card:#14262D;--ink:#E6F0F2;--mut:#93AEB5;--line:#26414A;--teal:#4BC0C8;--blue:#6BB3E6;--amber:#F0B45A;--rose:#EE7A8E;--green:#5CC79A;--soft:#193840;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0D1A1F;--card:#14262D;--ink:#E6F0F2;--mut:#93AEB5;--line:#26414A;--teal:#4BC0C8;--blue:#6BB3E6;--amber:#F0B45A;--rose:#EE7A8E;--green:#5CC79A;--soft:#193840;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.6 Figtree,system-ui,sans-serif}
+h1,h2,h3{font-family:'Bricolage Grotesque',Figtree,sans-serif;line-height:1.15;margin:0}
+.w{max-width:1080px;margin:0 auto;padding:0 20px}
+header.hero{padding:56px 0 40px;border-bottom:1px solid var(--line)}
+h1{font-size:clamp(32px,5.5vw,58px);font-weight:800;letter-spacing:-.02em;max-width:18ch}
+.lede{max-width:62ch;color:var(--mut);font-size:18px;margin:18px 0 0}
+section{padding:44px 0 8px}h2{font-size:clamp(24px,3.4vw,34px);font-weight:700;margin-bottom:6px}
+.sub{color:var(--mut);margin:0 0 22px;max-width:68ch}
+.grid{display:grid;gap:16px}.g2{grid-template-columns:repeat(auto-fit,minmax(min(100%,440px),1fr))}.g3{grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr))}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px}
+.card h3{font-size:18px;margin-bottom:4px}.card p.t{color:var(--mut);font-size:14px;margin:0 0 12px}
+.cv{position:relative;height:260px}.cv.tall{height:300px}
+.big{font:800 34px 'Bricolage Grotesque',sans-serif;letter-spacing:-.01em}.lab{color:var(--mut);font-size:14px}
+.strip{margin:30px 0 0;padding:20px;background:var(--card);border:1px solid var(--line);border-radius:14px}
+.strip .bar{position:relative;height:14px;background:var(--soft);border-radius:8px;margin:34px 6px 8px}
+.strip .dot{position:absolute;top:-3px;width:20px;height:20px;border-radius:50%;background:var(--teal);opacity:.55;border:2px solid var(--card)}
+.strip .ax{display:flex;justify-content:space-between;font-size:13px;color:var(--mut)}
+.pill{display:inline-block;padding:2px 10px;border-radius:99px;font-size:13px;font-weight:600}
+.hi{background:color-mix(in srgb,var(--green) 18%,transparent);color:var(--green)}.me{background:color-mix(in srgb,var(--amber) 22%,transparent);color:var(--amber)}.lo{background:color-mix(in srgb,var(--rose) 18%,transparent);color:var(--rose)}
+.tw{overflow-x:auto}table{border-collapse:collapse;width:100%;font-size:14.5px;min-width:620px}
+th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:top}th{color:var(--mut);font-weight:600}
+.meter{height:8px;border-radius:6px;background:var(--soft);overflow:hidden;min-width:90px}.meter i{display:block;height:100%;background:var(--rose)}
+.opp{border-left:5px solid var(--teal)}.opp h3{font-size:19px}.opp ul{margin:8px 0 0;padding-left:18px;color:var(--mut)}.opp li{margin:3px 0}
+.note{background:var(--soft);border-radius:12px;padding:14px 18px;margin-top:16px}
+.rel{display:flex;gap:6px;margin-top:8px}.rel span{flex:1;height:10px;border-radius:5px;background:var(--line)}
+footer{padding:40px 0 60px;color:var(--mut);font-size:14px}
+a{color:var(--teal)}
+</style></head><body>
+<header class="hero"><div class="w">
+<h1>55,500 hospital stays, and almost no difference between any two groups</h1>
+<p class="lede">We audited your admissions file, measured eight KPIs, and tested every obvious split: condition, insurer, age, sex, admission type and month. The headline is unusual, and it matters for every decision you make from this data.</p>
+<div class="strip"><b>Average length of stay for each condition, on a 0–30 day scale</b>
+<div class="bar" id="strip"></div><div class="ax"><span>0 days</span><span>15</span><span>30 days</span></div>
+<p class="lab" style="margin:10px 0 0">All six conditions land within 0.3 days of each other (15.4 to 15.7).</p></div>
+</div></header>
+
+<section><div class="w">
+<h2>The short version</h2>
+<p class="sub">Written for someone with five minutes.</p>
+<div class="grid g2">
+<div class="card"><h3>What we found</h3><p>Stays last 15.5 days on average, and one in five patients stays 25 days or longer. That is the biggest lever in the file. Cutting just one day per stay would free about <b id="bd"></b> bed-days. Billing averages $25,539 per stay but has no link to stay length or condition, which is a billing integrity flag. No group differs from another in any statistically meaningful way.</p></div>
+<div class="card"><h3>What we can't tell you</h3><p>The file has no readmissions, outcomes, patient IDs or costs. So readmission, mortality and cost-per-case cannot be measured. The perfectly even spread across every field suggests the data may be synthetic or heavily anonymised. Treat it as a practice dataset unless you can confirm it comes from live systems.</p></div>
+</div>
+<div class="grid g3" style="margin-top:16px" id="kpis"></div>
+</div></section>
+
+<section><div class="w">
+<h2>Phase 1 · Is the data trustworthy?</h2>
+<p class="sub">One row per admission, 15 columns, 8 May 2019 to 7 May 2024. 2019 and 2024 are partial years, so we compare full years only (2020–2023).</p>
+<div class="grid g2">
+<div class="card"><h3>Quality issues, by size</h3><p class="t">Share of rows affected</p><div class="cv"><canvas id="cq"></canvas></div></div>
+<div class="card"><h3>Reliability rating</h3>
+<p><span class="pill me">Medium</span> for describing volumes and stays. <span class="pill lo">Low</span> for deciding on cost or quality.</p>
+<div class="rel"><span style="background:var(--green)"></span><span style="background:var(--amber)"></span><span style="background:var(--line)"></span></div>
+<p class="lab">No missing values, no negative stays, no discharge before admission. But the issues on the left, plus a flat statistical profile, limit what you can safely conclude.</p>
+<div class="note"><b>Privacy:</b> Name is a direct identifier in this file. Remove it (and consider hashing Doctor) before sharing. We did not look up or re-identify anyone.</div></div>
+</div>
+<div class="card tw" style="margin-top:16px"><table><tr><th>Issue</th><th>Count</th><th>What we did</th><th>Effect on conclusions</th></tr>
+<tr><td>Exact duplicate rows</td><td id="d1"></td><td>Kept, flagged. Not removed silently.</td><td>Double-counts about $13.4M of billing.</td></tr>
+<tr><td>Negative billing amounts</td><td id="d2"></td><td>Kept; treated as credits or errors in the histogram (shown as $0).</td><td>Total −$53.9k. Needs finance review.</td></tr>
+<tr><td>Names with random capitals</td><td>≈ all rows</td><td>Not used in analysis.</td><td>Blocks patient matching and readmission tracking.</td></tr>
+<tr><td>Names with titles (Mr., Dr., …)</td><td id="d3"></td><td>Not used.</td><td>Same patient may appear under different spellings.</td></tr>
+<tr><td>Hospital names malformed</td><td id="d4"></td><td>Not used for comparison.</td><td><span id="hn"></span> unique hospitals and <span id="dn"></span> unique doctors for 55,500 rows: facility and provider comparison is impossible.</td></tr>
+<tr><td>Partial years (2019, 2024)</td><td>2 years</td><td>Excluded from yearly and seasonal comparison.</td><td>Avoids false "growth" in 2020.</td></tr></table></div>
+</div></section>
+
+<section><div class="w">
+<h2>Phase 2 · The KPIs we can measure</h2>
+<p class="sub">Eight metrics, each with its formula, so anyone can reproduce them.</p>
+<div class="card tw"><table><tr><th>Metric</th><th>Formula</th><th>Value</th><th>Status</th></tr>
+<tr><td>Average length of stay (LOS)</td><td>mean(discharge date − admission date)</td><td><b>15.51 days</b></td><td><span class="pill lo">Long</span> Typical acute stays run roughly 5–6 days</td></tr>
+<tr><td>Long-stay share</td><td>stays ≥ 25 days ÷ all stays</td><td><b>20.1%</b></td><td><span class="pill lo">High</span></td></tr>
+<tr><td>Total bed-days</td><td>sum of LOS</td><td><b id="bd2"></b></td><td><span class="pill me">Baseline</span></td></tr>
+<tr><td>Average billing per stay</td><td>mean(Billing Amount)</td><td><b>$25,539</b></td><td><span class="pill me">Baseline</span></td></tr>
+<tr><td>Billing per bed-day</td><td>total billing ÷ total bed-days</td><td><b>$1,647</b></td><td><span class="pill me">Unverified</span></td></tr>
+<tr><td>Abnormal test-result rate</td><td>Abnormal ÷ all results</td><td><b>33.6%</b></td><td><span class="pill me">No benchmark</span> Result is not a diagnosis</td></tr>
+<tr><td>Emergency + urgent share</td><td>(Emergency + Urgent) ÷ all</td><td><b>66.4%</b></td><td><span class="pill me">Baseline</span></td></tr>
+<tr><td>Billing data error rate</td><td>(duplicates + negatives) ÷ all rows</td><td><b>1.2%</b></td><td><span class="pill lo">Fix</span></td></tr></table></div>
+<p class="sub" style="margin-top:12px">Not measurable from this file: readmission rate, mortality, denial rate, cost per case, no-show rate.</p>
+</div></section>
+
+<section><div class="w">
+<h2>Phase 3 · What the data looks like</h2>
+<p class="sub">Stays, bills and ages are spread almost perfectly evenly. Real hospital data usually has sharp peaks (many short stays, a long tail of expensive ones).</p>
+<div class="grid g2">
+<div class="card"><h3>Length of stay</h3><p class="t">Patients per day of stay. Flat from day 1 to day 30.</p><div class="cv"><canvas id="c1"></canvas></div></div>
+<div class="card"><h3>Billing amount</h3><p class="t">Patients per $5k band. Flat from $0 to $50k.</p><div class="cv"><canvas id="c2"></canvas></div></div>
+<div class="card"><h3>Age</h3><p class="t">Patients per decade (ages 13–89).</p><div class="cv"><canvas id="c3"></canvas></div></div>
+<div class="card"><h3>Test results</h3><p class="t">One-third each: Normal, Abnormal, Inconclusive.</p><div class="cv"><canvas id="c4"></canvas></div></div>
+</div>
+<h2 style="margin-top:36px">By group: look how little moves</h2>
+<p class="sub">Bars start at zero on purpose. If a group were truly different, you would see it here.</p>
+<div class="grid g2">
+<div class="card"><h3>Average stay by condition</h3><p class="t">Days</p><div class="cv"><canvas id="s1"></canvas></div></div>
+<div class="card"><h3>Average bill by insurer</h3><p class="t">US dollars</p><div class="cv"><canvas id="s2"></canvas></div></div>
+<div class="card"><h3>Abnormal results by age group</h3><p class="t">% of tests. The under-18 group has only 116 patients, so treat its higher 40.5% with caution.</p><div class="cv"><canvas id="s3"></canvas></div></div>
+<div class="card"><h3>Admissions by type</h3><p class="t">Elective, emergency and urgent are almost identical in volume.</p><div class="cv"><canvas id="s4"></canvas></div></div>
+</div>
+<div class="grid g2" style="margin-top:16px">
+<div class="card"><h3>Monthly admissions, 2019–2024</h3><p class="t">Dips at both ends are partial years, not real declines.</p><div class="cv"><canvas id="t1"></canvas></div></div>
+<div class="card"><h3>Seasonality (2020–2023)</h3><p class="t">Month volume vs. an average month = 100. February's dip is mostly fewer days.</p><div class="cv"><canvas id="t2"></canvas></div></div>
+</div>
+<div class="card tw" style="margin-top:16px"><h3>Statistical tests: is any difference real?</h3><p class="t">p-values. A value below 0.05 would signal a real difference. None do.</p><table id="pt"></table>
+<div class="note">Correlations are all near zero: age vs. stay 0.008, age vs. bill −0.004, stay vs. bill −0.006. Longer stays should cost more. Here they don't, so billing is not tied to the care delivered.</div></div>
+</div></section>
+
+<section><div class="w">
+<h2>Phase 4 · Five opportunities</h2>
+<p class="sub">Ranked by impact. Confidence reflects how much the data can really support the claim.</p>
+<div class="grid">
+<div class="card opp"><h3>1 · Shorten long stays <span class="pill me">Medium confidence</span></h3><ul>
+<li><b>Shows:</b> 15.5-day average; 20.1% of stays (≈11,150) last 25–30 days.</li>
+<li><b>Affects:</b> every condition and insurer equally, so it is a system-wide pattern.</li>
+<li><b>Impact:</b> one day less per stay frees about 55,500 bed-days over 5 years, roughly 11,100 a year or 30 beds continuously occupied.</li>
+<li><b>Why only medium:</b> no diagnosis severity, so we can't say which stays were avoidable.</li></ul></div>
+<div class="card opp" style="border-color:var(--rose)"><h3>2 · Fix billing integrity <span class="pill hi">High confidence</span></h3><ul>
+<li><b>Shows:</b> 534 duplicate rows (≈$13.4M), 108 negative bills (−$53.9k), 426 bills under $1,000.</li>
+<li><b>Impact:</b> up to $13.4M in overstated revenue, or duplicate charges, to verify.</li>
+<li><b>Why high:</b> these are countable, not statistical.</li></ul></div>
+<div class="card opp" style="border-color:var(--amber)"><h3>3 · Link price to care <span class="pill me">Medium confidence</span></h3><ul>
+<li><b>Shows:</b> billing is uncorrelated with stay length (−0.006) and condition (p = 0.056, borderline).</li>
+<li><b>Impact:</b> unknown until a charge master or cost data is added. Possible under- or over-billing.</li></ul></div>
+<div class="card opp" style="border-color:var(--blue)"><h3>4 · Repair identifiers for readmission tracking <span class="pill hi">High confidence</span></h3><ul>
+<li><b>Shows:</b> 49,992 distinct names for 55,500 rows, mangled capitalisation, no patient ID.</li>
+<li><b>Impact:</b> readmissions, the standard quality KPI, cannot be measured at all today.</li></ul></div>
+<div class="card opp" style="border-color:var(--green)"><h3>5 · Follow up on abnormal results <span class="pill lo">Low confidence</span></h3><ul>
+<li><b>Shows:</b> 18,627 abnormal and 18,356 inconclusive results, 66.6% together.</li>
+<li><b>Impact:</b> inconclusive tests often mean repeat testing and extra days. We can't prove it here.</li></ul></div>
+</div></div></section>
+
+<section><div class="w">
+<h2>Phase 5 · Why might this be happening?</h2>
+<p class="sub">Hypotheses to test, not conclusions. The data cannot prove causes.</p>
+<div class="grid g2">
+<div class="card"><h3>Flat patterns everywhere</h3><ul style="color:var(--mut);padding-left:18px"><li><b>Synthetic or randomised data.</b> Test: compare to the live source system, check generation notes.</li><li><b>Over-anonymisation.</b> Test: ask data owners what was shuffled.</li><li><b>Genuine standardisation.</b> Unlikely given uniform billing; test with clinical review.</li></ul></div>
+<div class="card"><h3>Long stays</h3><ul style="color:var(--mut);padding-left:18px"><li><b>Discharge delays.</b> Test: add discharge-ready timestamps.</li><li><b>Severity not captured.</b> Test: add DRG or ICD-10 codes.</li><li><b>Data entry errors in dates.</b> Test: audit a sample of 100 charts.</li></ul></div>
+<div class="card"><h3>Billing oddities</h3><ul style="color:var(--mut);padding-left:18px"><li><b>Duplicate load from the system.</b> Test: check ETL logs.</li><li><b>Credits entered as negatives.</b> Test: finance review of 108 rows.</li></ul></div>
+<div class="card"><h3>What the data proves vs. suggests</h3><p><b>Proves:</b> counts, averages, duplicates, no significant group differences. <b>Suggests:</b> a systemic LOS issue and weak billing linkage. <b>Cannot say:</b> anything about quality or outcomes.</p></div>
+</div></div></section>
+
+<section><div class="w">
+<h2>Phase 6 · Action plan</h2>
+<div class="card tw"><table><tr><th>Recommendation</th><th>Impact</th><th>Effort</th><th>Priority</th><th>Owner</th><th>Success metric</th><th>Time</th></tr>
+<tr><td><b>Quick win:</b> Remove duplicates, review negatives</td><td>Up to $13.4M corrected</td><td>Low</td><td>1</td><td>Finance + data team</td><td>0 duplicate rows</td><td>2 weeks</td></tr>
+<tr><td><b>Quick win:</b> Remove Name, add patient ID</td><td>Privacy + enables readmissions</td><td>Low</td><td>2</td><td>Data steward</td><td>100% rows with ID</td><td>30 days</td></tr>
+<tr><td><b>Quick win:</b> Standardise hospital and doctor fields</td><td>Enables site comparison</td><td>Med</td><td>3</td><td>Data engineering</td><td>Unique hospitals under 50</td><td>30 days</td></tr>
+<tr><td>Add diagnosis code, severity, outcome and readmit flag</td><td>Unlocks 5 more KPIs</td><td>Med</td><td>4</td><td>Clinical informatics</td><td>Readmission rate reported</td><td>90 days</td></tr>
+<tr><td>Long-stay review (≥25 days)</td><td>~11,100 bed-days a year per day saved</td><td>High</td><td>5</td><td>Clinical ops</td><td>LOS down 1 day</td><td>6 months</td></tr>
+<tr><td>Reconcile billing to charge master</td><td>Pricing accuracy</td><td>High</td><td>6</td><td>Revenue cycle</td><td>Billing vs. LOS correlation &gt; 0.3</td><td>6 months</td></tr></table></div>
+<p class="sub" style="margin-top:12px"><b>Risks:</b> pushing LOS down without outcome data could raise readmissions. Only act on LOS after readmission tracking exists.</p>
+</div></section>
+
+<section><div class="w">
+<h2>Limitations & what to ask next</h2>
+<div class="grid g2">
+<div class="card"><h3>Limitations</h3><ul style="color:var(--mut);padding-left:18px"><li>No patient ID, so one row may not equal one person.</li><li>No cost data: billing is not cost.</li><li>Benchmarks (5–6 day acute stay) are general rules of thumb, not tied to your case mix.</li><li>Observational data: nothing here shows cause and effect.</li><li>Under-18 group is small (116).</li></ul></div>
+<div class="card"><h3>Five questions to sharpen this</h3><ol style="color:var(--mut);padding-left:18px"><li>Is this real, de-identified or synthetic data?</li><li>Can you provide a patient ID and readmission flag?</li><li>What are diagnosis codes and DRGs for each stay?</li><li>What does Billing Amount represent: charge, payment or cost?</li><li>Which units or sites should we compare, and how are they coded?</li></ol></div>
+</div></div></section>
+<footer><div class="w">Analysis of healthcare_dataset.csv · 55,500 rows · built with pandas, scipy and Chart.js. Patient names were not used.</div></footer>
+
+<script>
+const D={"n": 55500, "total": 1417432043, "mean_bill": 25539, "mean_los": 15.51, "bedDays": 860750, "perday": 1647, "long": 20.1, "losH": [[1817, 1844, 1841, 1863, 1832, 1903, 1886, 1828, 1868, 1802, 1895, 1843, 1864, 1909, 1785, 1757, 1818, 1819, 1890, 1907, 1959, 1784, 1866, 1759, 1864, 1819, 1884, 1853, 1867, 1874], [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30]], "bH": [[4561, 5691, 5582, 5605, 5711, 5680, 5628, 5612, 5694, 5278], ["$0\u20135k", "$5\u201310k", "$10\u201315k", "$15\u201320k", "$20\u201325k", "$25\u201330k", "$30\u201335k", "$35\u201340k", "$40\u201345k", "$45\u201350k"]], "aH": [[1693, 8000, 8179, 8130, 8350, 8177, 8072, 4899], ["10s", "20s", "30s", "40s", "50s", "60s", "70s", "80s"]], "cond": {"l": ["Arthritis", "Asthma", "Cancer", "Diabetes", "Hypertension", "Obesity"], "n": [9308, 9185, 9227, 9304, 9245, 9231], "los": [15.52, 15.7, 15.5, 15.42, 15.46, 15.46], "bill": [25497.0, 25635.0, 25162.0, 25638.0, 25497.0, 25806.0], "abn": [34.2, 32.8, 33.8, 34.0, 32.6, 33.9]}, "adm": {"l": ["Elective", "Emergency", "Urgent"], "n": [18655, 18269, 18576], "los": [15.53, 15.6, 15.41], "bill": [25602.0, 25497.0, 25517.0], "abn": [33.8, 33.3, 33.6]}, "ins": {"l": ["Aetna", "Blue Cross", "Cigna", "Medicare", "UnitedHealthcare"], "n": [10913, 11059, 11249, 11154, 11125], "los": [15.45, 15.52, 15.49, 15.63, 15.46], "bill": [25553.0, 25613.0, 25526.0, 25616.0, 25389.0], "abn": [33.3, 32.9, 33.8, 33.9, 33.9]}, "sex": {"l": ["Female", "Male"], "n": [27726, 27774], "los": [15.48, 15.54], "bill": [25471.0, 25608.0], "abn": [33.7, 33.4]}, "age": {"l": ["<18", "18-34", "35-49", "50-64", "65-79", "80+"], "n": [116, 13605, 12281, 12411, 12188, 4899], "los": [15.32, 15.42, 15.42, 15.59, 15.65, 15.46], "bill": [28513.0, 25571.0, 25560.0, 25620.0, 25488.0, 25254.0], "abn": [40.5, 33.0, 33.8, 34.0, 33.5, 33.4]}, "med": {"l": ["Aspirin", "Ibuprofen", "Lipitor", "Paracetamol", "Penicillin"], "n": [11094, 11127, 11140, 11071, 11068], "los": [15.54, 15.46, 15.48, 15.51, 15.55], "bill": [25594.0, 25736.0, 25342.0, 25533.0, 25491.0], "abn": [33.6, 33.7, 33.3, 33.8, 33.5]}, "mo": {"l": ["2019-05", "2019-06", "2019-07", "2019-08", "2019-09", "2019-10", "2019-11", "2019-12", "2020-01", "2020-02", "2020-03", "2020-04", "2020-05", "2020-06", "2020-07", "2020-08", "2020-09", "2020-10", "2020-11", "2020-12", "2021-01", "2021-02", "2021-03", "2021-04", "2021-05", "2021-06", "2021-07", "2021-08", "2021-09", "2021-10", "2021-11", "2021-12", "2022-01", "2022-02", "2022-03", "2022-04", "2022-05", "2022-06", "2022-07", "2022-08", "2022-09", "2022-10", "2022-11", "2022-12", "2023-01", "2023-02", "2023-03", "2023-04", "2023-05", "2023-06", "2023-07", "2023-08", "2023-09", "2023-10", "2023-11", "2023-12", "2024-01", "2024-02", "2024-03", "2024-04", "2024-05"], "n": [686, 907, 957, 1001, 936, 1013, 959, 928, 950, 881, 937, 924, 978, 935, 1007, 1014, 904, 962, 904, 889, 933, 837, 969, 870, 903, 926, 978, 894, 867, 893, 908, 953, 969, 777, 938, 880, 892, 970, 951, 955, 919, 912, 896, 958, 931, 880, 922, 898, 927, 961, 919, 968, 920, 898, 881, 921, 909, 880, 906, 946, 213], "b": [25733.0, 26334.0, 25885.0, 25373.0, 24930.0, 25939.0, 25844.0, 25589.0, 25655.0, 25340.0, 25515.0, 25032.0, 25529.0, 25993.0, 24820.0, 25461.0, 24803.0, 25056.0, 25315.0, 26238.0, 25515.0, 25537.0, 25919.0, 25786.0, 25053.0, 26071.0, 25812.0, 25465.0, 25090.0, 26682.0, 25636.0, 24969.0, 25525.0, 24708.0, 25777.0, 25643.0, 25636.0, 25288.0, 25880.0, 24978.0, 25633.0, 25608.0, 26216.0, 25200.0, 25972.0, 25520.0, 24367.0, 25517.0, 24709.0, 26054.0, 25173.0, 25647.0, 25733.0, 26759.0, 25564.0, 25874.0, 25784.0, 25611.0, 25267.0, 24859.0, 25499.0], "l2": [15.13, 15.42, 15.93, 15.7, 15.07, 16.2, 15.37, 16.02, 15.77, 15.51, 15.34, 16.01, 16.01, 15.98, 15.39, 15.34, 14.8, 15.11, 15.64, 15.69, 15.79, 15.38, 14.95, 15.9, 15.11, 15.96, 15.47, 16.06, 14.71, 15.12, 15.61, 15.31, 15.3, 15.06, 15.49, 15.11, 15.72, 14.77, 15.39, 15.7, 15.7, 15.08, 15.17, 15.81, 15.57, 15.6, 15.77, 15.53, 15.43, 15.47, 15.34, 15.48, 15.79, 15.31, 15.75, 15.05, 15.53, 15.56, 15.96, 16.17, 15.0]}, "cal": [102.6, 91.5, 102.1, 96.8, 100.3, 102.8, 104.5, 103.9, 97.9, 99.4, 97.3, 100.9], "test": {"Abnormal": 18627, "Normal": 18517, "Inconclusive": 18356}, "tests": [["Condition", 0.324, 0.056, 0.21], ["Admission type", 0.111, 0.752, 0.858], ["Insurer", 0.498, 0.757, 0.397], ["Sex", 0.366, 0.255, 0.365], ["Age group", 0.209, 0.174, 0.093]], "corr": [0.008, -0.004, -0.006], "neg": [108, -53925], "dups": 534, "dupbill": 13363704, "hosp": 39876, "doc": 40341, "nm": 49992, "prefix": 1114, "hnoise": 10465, "elig": 25522, "lowbill": 426};
+const fmt=n=>n.toLocaleString('en-US');
+const css=getComputedStyle(document.documentElement),v=k=>css.getPropertyValue(k).trim();
+const C=[v('--teal'),v('--blue'),v('--amber'),v('--rose'),v('--green'),'#8E7DBE'];
+Chart.defaults.color=v('--mut');Chart.defaults.font.family='Figtree,system-ui,sans-serif';Chart.defaults.borderColor=v('--line');
+const opts=(o={})=>({responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},...o});
+const bar=(id,l,d,c,max,x={})=>new Chart(id,{type:'bar',data:{labels:l,datasets:[{data:d,backgroundColor:c,borderRadius:5}]},options:opts({scales:{y:{beginAtZero:true,max,grid:{color:v('--line')}},x:{grid:{display:false}}},...x})});
+// text
+const $=i=>document.getElementById(i);
+$('bd').textContent=fmt(D.n);$('bd2').textContent=fmt(D.bedDays);
+$('d1').textContent=D.dups;$('d2').textContent=D.neg[0];$('d3').textContent=fmt(D.prefix);$('d4').textContent=fmt(D.hnoise);
+$('hn').textContent=fmt(D.hosp);$('dn').textContent=fmt(D.doc);
+[['55,500','Admissions analysed'],['15.5 days','Average stay'],['$25.5k','Average bill'],['20.1%','Stays of 25+ days']].forEach(k=>$('kpis').insertAdjacentHTML('beforeend',`<div class="card"><div class="big">${k[0]}</div><div class="lab">${k[1]}</div></div>`));
+D.cond.los.forEach((x,i)=>$('strip').insertAdjacentHTML('beforeend',`<span class="dot" title="${D.cond.l[i]}: ${x} days" style="left:calc(${x/30*100}% - 10px)"></span>`));
+// quality chart
+const q=[['Names with odd capitals',99.9],['Hospital name malformed',D.hnoise/D.n*100],['Titles in names',D.prefix/D.n*100],['Duplicate rows',D.dups/D.n*100],['Bills under $1,000',D.lowbill/D.n*100],['Negative bills',D.neg[0]/D.n*100]];
+new Chart('cq',{type:'bar',data:{labels:q.map(x=>x[0]),datasets:[{data:q.map(x=>+x[1].toFixed(1)),backgroundColor:[C[3],C[2],C[2],C[3],C[1],C[3]],borderRadius:5}]},options:opts({indexAxis:'y',scales:{x:{max:100,title:{display:true,text:'% of rows'}},y:{grid:{display:false}}}})});
+bar('c1',D.losH[1],D.losH[0],C[0],2500,{scales:{y:{beginAtZero:true,max:2500},x:{grid:{display:false},ticks:{maxTicksLimit:10}}}});
+bar('c2',D.bH[1],D.bH[0],C[1],7000,{scales:{y:{beginAtZero:true,max:7000},x:{grid:{display:false},ticks:{maxRotation:0,autoSkip:true,font:{size:10}}}}});
+bar('c3',D.aH[1],D.aH[0],C[4],14000);
+new Chart('c4',{type:'doughnut',data:{labels:Object.keys(D.test),datasets:[{data:Object.values(D.test),backgroundColor:[C[3],C[2],C[4]],borderColor:v('--card'),borderWidth:3}]},options:opts({cutout:'62%',plugins:{legend:{display:true,position:'bottom'}}})});
+bar('s1',D.cond.l,D.cond.los,C[0],20);
+bar('s2',D.ins.l,D.ins.bill,C[1],35000);
+bar('s3',D.age.l,D.age.abn,D.age.l.map((x,i)=>i==0?C[2]:C[3]),50);
+new Chart('s4',{type:'doughnut',data:{labels:D.adm.l,datasets:[{data:D.adm.n,backgroundColor:[C[0],C[3],C[2]],borderColor:v('--card'),borderWidth:3}]},options:opts({cutout:'62%',plugins:{legend:{display:true,position:'bottom'}}})});
+new Chart('t1',{type:'line',data:{labels:D.mo.l,datasets:[{data:D.mo.n,borderColor:C[0],backgroundColor:C[0]+'33',fill:true,pointRadius:0,tension:.3}]},options:opts({scales:{y:{beginAtZero:true},x:{ticks:{maxTicksLimit:7},grid:{display:false}}}})});
+const mn=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+bar('t2',mn,D.cal,D.cal.map(x=>x<95?C[3]:C[0]),120);
+$('pt').innerHTML='<tr><th>Split</th><th>Stay length</th><th>Billing</th><th>Test results</th></tr>'+D.tests.map(r=>`<tr><td>${r[0]}</td>${r.slice(1).map(p=>`<td>${p.toFixed(3)} <span class="pill ${p<.05?'lo':'hi'}">${p<.05?'differs':'no difference'}</span></td>`).join('')}</tr>`).join('');
+</script></body></html>
